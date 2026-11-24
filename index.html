@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgentHub — Panel de administración</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">@custom-variant dark (&:where(.dark, .dark *));</style>
+    <script src="app.js" defer></script>
+  </head>
+  <body class="min-h-screen bg-slate-50 font-sans text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div class="flex min-h-screen">
+      <aside class="flex w-20 shrink-0 flex-col border-r border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 lg:w-64" aria-label="Navegación principal">
+        <a href="#dashboard" class="mb-8 flex items-center justify-center gap-3 rounded-lg px-3 py-2 text-lg font-semibold text-slate-900 dark:text-slate-100 lg:justify-start">
+          <svg class="size-6 shrink-0 text-indigo-600 dark:text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 7v10l8 4 8-4V7l-8-4Z"/><path d="m8 9 4-2 4 2v6l-4 2-4-2V9Z"/></svg>
+          <span class="hidden lg:inline">AgentHub</span>
+        </a>
+        <nav aria-label="Secciones del panel">
+          <ul class="space-y-2">
+            <li><a href="#dashboard" data-section="dashboard" aria-current="page" class="flex items-center justify-center gap-3 rounded-lg bg-indigo-50 px-3 py-2.5 text-sm font-medium text-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:bg-indigo-950/50 dark:text-indigo-300 dark:focus-visible:ring-indigo-400 dark:focus-visible:ring-offset-slate-950 lg:justify-start" aria-label="Dashboard">
+              <svg class="size-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg><span class="hidden lg:inline">Dashboard</span></a></li>
+            <li><a href="#usuarios" data-section="usuarios" class="flex items-center justify-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus-visible:ring-indigo-400 dark:focus-visible:ring-offset-slate-950 lg:justify-start" aria-label="Gestión de usuarios">
+              <svg class="size-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="hidden lg:inline">Gestión de usuarios</span></a></li>
+            <li><a href="#agentes" data-section="agentes" class="flex items-center justify-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus-visible:ring-indigo-400 dark:focus-visible:ring-offset-slate-950 lg:justify-start" aria-label="Gestión de agentes">
+              <svg class="size-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V5a3 3 0 0 1 6 0v2M8 12h.01M16 12h.01M9 16h6"/></svg><span class="hidden lg:inline">Gestión de agentes</span></a></li>
+            <li><a href="#skills" data-section="skills" class="flex items-center justify-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus-visible:ring-indigo-400 dark:focus-visible:ring-offset-slate-950 lg:justify-start" aria-label="Skills">
+              <svg class="size-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3Z"/><path d="m19 14 1.2 2.8L23 18l-2.8 1.2L19 22l-1.2-2.8L15 18l2.8-1.2L19 14Z"/></svg><span class="hidden lg:inline">Skills</span></a></li>
+            <li><a href="#contrataciones" data-section="contrataciones" class="flex items-center justify-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus-visible:ring-indigo-400 dark:focus-visible:ring-offset-slate-950 lg:justify-start" aria-label="Contrataciones de agentes">
+              <svg class="size-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-3-6 3V3Z"/><path d="M9 8h6M9 12h6"/></svg><span class="hidden lg:inline">Contrataciones</span></a></li>
+            <li><a href="#errores" data-section="errores" class="flex items-center justify-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus-visible:ring-indigo-400 dark:focus-visible:ring-offset-slate-950 lg:justify-start" aria-label="Log de errores">
+              <svg class="size-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2.8 19a2 2 0 0 0 1.7 3h15a2 2 0 0 0 1.7-3L12 3Z"/><path d="M12 9v4M12 17h.01"/></svg><span class="hidden lg:inline">Log de errores</span></a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <div class="min-w-0 flex-1">
+        <header class="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-slate-200 bg-white/90 px-6 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
+          <h1 id="page-title" class="text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100">Dashboard</h1>
+          <button id="theme-toggle" type="button" aria-label="Cambiar modo de color" class="inline-flex size-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white dark:focus-visible:ring-indigo-400 dark:focus-visible:ring-offset-slate-950">
+            <svg class="size-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+            <svg class="size-5 block dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg>
+          </button>
+        </header>
+
+        <main class="mx-auto w-full max-w-7xl p-6">
+          <section id="dashboard" class="space-y-2" aria-labelledby="dashboard-title">
+            <h1 id="dashboard-title" class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Dashboard</h1>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Resumen general de la actividad de AgentHub.</p>
+          </section>
+          <section id="usuarios" class="hidden space-y-2" aria-labelledby="usuarios-title">
+            <h1 id="usuarios-title" class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Gestión de usuarios</h1>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Consulta y administra los usuarios de AgentHub.</p>
+          </section>
+          <section id="agentes" class="hidden space-y-2" aria-labelledby="agentes-title">
+            <h1 id="agentes-title" class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Gestión de agentes</h1>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Consulta y administra los agentes disponibles.</p>
+          </section>
+          <section id="skills" class="hidden space-y-2" aria-labelledby="skills-title">
+            <h1 id="skills-title" class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Skills</h1>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Consulta las capacidades disponibles para los agentes.</p>
+          </section>
+          <section id="contrataciones" class="hidden space-y-2" aria-labelledby="contrataciones-title">
+            <h1 id="contrataciones-title" class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Contrataciones de agentes</h1>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Consulta las contrataciones de agentes y sus estados.</p>
+          </section>
+          <section id="errores" class="hidden space-y-2" aria-labelledby="errores-title">
+            <h1 id="errores-title" class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Log de errores</h1>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Consulta los errores registrados durante la ejecución.</p>
+          </section>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
