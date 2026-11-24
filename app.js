@@ -168,7 +168,7 @@ function renderSkills() {
         </div>
         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">${skill.descripcion}</p>
         <dl class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600 dark:text-slate-400">
-          <div><dt class="inline font-medium text-slate-700 dark:text-slate-300">Precio unitario: </dt><dd class="inline">${skill.precioUnitario} EUR</dd></div>
+          <div><dt class="inline font-medium text-slate-700 dark:text-slate-300">Precio unitario: </dt><dd class="inline">${skill.precioUnitario} €</dd></div>
           <div><dt class="inline font-medium text-slate-700 dark:text-slate-300">Agentes: </dt><dd class="inline">${agentes.length}</dd></div>
         </dl>
       </li>`;
@@ -323,7 +323,7 @@ function showSkillDetails(skill) {
   const content = document.createDocumentFragment();
   const fields = [
     ["Descripción", skill.descripcion],
-    ["Precio unitario", `${skill.precioUnitario} EUR`],
+    ["Precio unitario", `${skill.precioUnitario} €`],
     ["Agentes que utilizan esta skill", DATA.agentes.filter((agente) => agente.skills.includes(skill.nombre)).map((agente) => agente.nombre).join(", ") || "Ninguno"],
   ];
   const name = document.createElement("p");
