@@ -44,6 +44,7 @@ const DATA = {
 };
 
 const usersTableBody = document.querySelector("#users-table-body");
+const agentsList = document.querySelector("#agents-list");
 const modal = document.querySelector("#app-modal");
 const modalDialog = modal.querySelector('[role="dialog"]');
 const modalTitle = document.querySelector("#modal-title");
@@ -76,6 +77,75 @@ function renderUsers() {
         </td>
       </tr>`;
   }).join("");
+}
+
+function renderAgents() {
+  agentsList.innerHTML = DATA.agentes.map((agente, index) => {
+    const statusClasses = agente.estado === "Activo"
+      ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800"
+      : agente.estado === "Fallando"
+        ? "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/50 dark:text-rose-300 dark:border-rose-800"
+        : "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700";
+
+    return `
+      <li class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900" data-agent-index="${index}">
+        <div class="flex items-start justify-between gap-4">
+          <div class="min-w-0">
+            <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100">${agente.nombre}</h2>
+            <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Propietario: ${agente.propietario}</p>
+          </div>
+          <div class="flex shrink-0 items-center gap-2">
+            <span class="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium ${statusClasses}">${agente.estado}</span>
+            <div class="relative inline-block text-left">
+              <button type="button" class="inline-flex size-9 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus-visible:ring-indigo-400 dark:focus-visible:ring-offset-slate-950" aria-label="Acciones para ${agente.nombre}" aria-expanded="false" data-dropdown-trigger><span aria-hidden="true">⋮</span></button>
+              <div class="absolute right-0 z-30 mt-2 hidden min-w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-900" data-dropdown-menu>
+                <button type="button" class="block w-full rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus-visible:ring-indigo-400" data-action="configure" data-entity="agent">Configurar</button>
+                <button type="button" class="block w-full rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus-visible:ring-indigo-400" data-action="delete" data-entity="agent">Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 border-t border-slate-100 pt-4 dark:border-slate-800/70">
+          <button type="button" class="inline-flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 dark:focus-visible:ring-indigo-400" aria-expanded="false" data-skills-toggle>
+            Skills (${agente.skills.length})
+            <svg class="size-4 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-chevron><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-300 ease-in-out" data-skills-panel>
+            <div class="overflow-hidden"><ul class="mt-3 flex flex-wrap gap-2">${agente.skills.map((skill) => `<li class="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">${skill}</li>`).join("")}</ul></div>
+          </div>
+        </div>
+      </li>`;
+  }).join("");
+}
+
+function showAgentConfig(agente) {
+  const content = document.createDocumentFragment();
+  const name = document.createElement("p");
+  name.className = "font-medium text-slate-900 dark:text-slate-100";
+  name.textContent = agente.nombre;
+  const label = document.createElement("label");
+  label.htmlFor = "agent-prompt";
+  label.className = "block text-sm font-medium text-slate-700 dark:text-slate-300";
+  label.textContent = "Prompt de sistema";
+  const textarea = document.createElement("textarea");
+  textarea.id = "agent-prompt";
+  textarea.rows = 6;
+  textarea.value = agente.prompt;
+  textarea.className = "mt-2 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus-visible:ring-indigo-400";
+  content.append(name, label, textarea);
+  openModal("Configurar agente", content);
+}
+
+function toggleAgentSkills(button) {
+  const panel = button.nextElementSibling;
+  const chevron = button.querySelector("[data-chevron]");
+  const expanded = button.getAttribute("aria-expanded") === "true";
+  button.setAttribute("aria-expanded", String(!expanded));
+  panel.classList.toggle("grid-rows-[0fr]", expanded);
+  panel.classList.toggle("opacity-0", expanded);
+  panel.classList.toggle("grid-rows-[1fr]", !expanded);
+  panel.classList.toggle("opacity-100", !expanded);
+  chevron.classList.toggle("rotate-180", !expanded);
 }
 
 function closeAllDropdowns() {
@@ -122,8 +192,15 @@ function showUserDetails(usuario) {
 }
 
 renderUsers();
+renderAgents();
 
 document.addEventListener("click", (event) => {
+  const skillsToggle = event.target.closest("[data-skills-toggle]");
+  if (skillsToggle) {
+    toggleAgentSkills(skillsToggle);
+    return;
+  }
+
   const trigger = event.target.closest("[data-dropdown-trigger]");
   if (trigger) {
     const menu = trigger.nextElementSibling;
@@ -140,6 +217,17 @@ document.addEventListener("click", (event) => {
   if (!actionButton) return;
 
   closeAllDropdowns();
+  if (actionButton.dataset.entity === "agent") {
+    const card = actionButton.closest("li[data-agent-index]");
+    if (!card) return;
+    const agente = DATA.agentes[Number(card.dataset.agentIndex)];
+    if (actionButton.dataset.action === "configure") {
+      showAgentConfig(agente);
+    } else if (actionButton.dataset.action === "delete") {
+      card.remove();
+    }
+    return;
+  }
   if (actionButton.dataset.entity !== "user") return;
 
   const row = actionButton.closest("tr[data-user-index]");
