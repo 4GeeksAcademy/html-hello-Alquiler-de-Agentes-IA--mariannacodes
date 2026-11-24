@@ -47,6 +47,7 @@ const usersTableBody = document.querySelector("#users-table-body");
 const agentsList = document.querySelector("#agents-list");
 const skillsCatalog = document.querySelector("#skills-catalog");
 const contractsTableBody = document.querySelector("#contracts-table-body");
+const errorsTableBody = document.querySelector("#errors-table-body");
 const modal = document.querySelector("#app-modal");
 const modalDialog = modal.querySelector('[role="dialog"]');
 const modalTitle = document.querySelector("#modal-title");
@@ -257,6 +258,67 @@ function showContractDetails(contrato) {
   openModal("Detalle de contratación", content);
 }
 
+function renderErrors() {
+  errorsTableBody.innerHTML = DATA.errores.map((error, index) => {
+    const severityClasses = error.gravedad === "Alta"
+      ? "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/50 dark:text-rose-300 dark:border-rose-800"
+      : error.gravedad === "Media"
+        ? "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800"
+        : "bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700";
+    const statusClasses = error.estado === "Resuelto"
+      ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800"
+      : "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800";
+    const neutralClasses = "bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700";
+
+    return `
+      <tr class="border-b border-slate-100 last:border-0 hover:bg-slate-50 dark:border-slate-800/70 dark:hover:bg-slate-800/70" data-error-index="${index}">
+        <td class="whitespace-nowrap px-4 py-3 text-sm tabular-nums text-slate-700 dark:text-slate-300">${error.timestamp}</td>
+        <td class="whitespace-nowrap px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100">${error.agente}</td>
+        <td class="whitespace-nowrap px-4 py-3 text-sm"><span class="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium ${neutralClasses}">${error.tipo}</span></td>
+        <td class="whitespace-nowrap px-4 py-3 text-sm"><span class="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium ${severityClasses}">${error.gravedad}</span></td>
+        <td class="whitespace-nowrap px-4 py-3 text-sm"><span data-error-status class="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium ${statusClasses}">${error.estado}</span></td>
+        <td class="px-4 py-3 text-sm text-slate-700 dark:text-slate-300">${error.descripcion}</td>
+        <td class="whitespace-nowrap px-4 py-3 text-right">
+          <div class="relative inline-block text-left">
+            <button type="button" class="inline-flex size-9 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus-visible:ring-indigo-400 dark:focus-visible:ring-offset-slate-950" aria-label="Acciones para el error de ${error.agente} del ${error.timestamp}" aria-expanded="false" data-dropdown-trigger><span aria-hidden="true">⋮</span></button>
+            <div class="absolute right-0 z-30 mt-2 hidden min-w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-900" data-dropdown-menu>
+              <button type="button" class="block w-full rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus-visible:ring-indigo-400" data-action="detail" data-entity="error">Ver detalle</button>
+              <button type="button" class="block w-full rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus-visible:ring-indigo-400" data-action="resolve" data-entity="error">Marcar como resuelto</button>
+            </div>
+          </div>
+        </td>
+      </tr>`;
+  }).join("");
+}
+
+function showErrorDetails(error) {
+  const content = document.createDocumentFragment();
+  const fields = [
+    ["Timestamp", error.timestamp],
+    ["Agente", error.agente],
+    ["Tipo", error.tipo],
+    ["Gravedad", error.gravedad],
+    ["Estado", error.estado],
+    ["Descripción", error.descripcion],
+  ];
+  fields.forEach(([label, value]) => {
+    const row = document.createElement("p");
+    const fieldLabel = document.createElement("span");
+    fieldLabel.className = "font-medium text-slate-900 dark:text-slate-100";
+    fieldLabel.textContent = `${label}: `;
+    row.append(fieldLabel, document.createTextNode(value));
+    content.append(row);
+  });
+  const traceHeading = document.createElement("h3");
+  traceHeading.className = "font-medium text-slate-900 dark:text-slate-100";
+  traceHeading.textContent = "Traza completa";
+  const trace = document.createElement("pre");
+  trace.className = "overflow-x-auto rounded-lg bg-slate-50 p-3 font-mono text-xs text-slate-700 dark:bg-slate-800/60 dark:text-slate-300";
+  trace.textContent = error.traza;
+  content.append(traceHeading, trace);
+  openModal("Detalle de error", content);
+}
+
 function showSkillDetails(skill) {
   const content = document.createDocumentFragment();
   const fields = [
@@ -326,6 +388,7 @@ renderUsers();
 renderAgents();
 renderSkills();
 renderContracts();
+renderErrors();
 
 document.addEventListener("click", (event) => {
   const skillsToggle = event.target.closest("[data-skills-toggle]");
@@ -376,6 +439,20 @@ document.addEventListener("click", (event) => {
     const row = actionButton.closest("tr[data-contract-index]");
     if (!row) return;
     showContractDetails(DATA.contratos[Number(row.dataset.contractIndex)]);
+    return;
+  }
+  if (actionButton.dataset.entity === "error") {
+    const row = actionButton.closest("tr[data-error-index]");
+    if (!row) return;
+    const error = DATA.errores[Number(row.dataset.errorIndex)];
+    if (actionButton.dataset.action === "detail") {
+      showErrorDetails(error);
+    } else if (actionButton.dataset.action === "resolve" && error.estado !== "Resuelto") {
+      error.estado = "Resuelto";
+      const status = row.querySelector("[data-error-status]");
+      status.textContent = "Resuelto";
+      status.className = "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800";
+    }
     return;
   }
   if (actionButton.dataset.entity !== "user") return;

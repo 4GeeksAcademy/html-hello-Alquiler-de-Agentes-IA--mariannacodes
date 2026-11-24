@@ -137,6 +137,22 @@
           <section id="errores" class="hidden space-y-2" aria-labelledby="errores-title">
             <h1 id="errores-title" class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Log de errores</h1>
             <p class="text-sm text-slate-600 dark:text-slate-400">Consulta los errores registrados durante la ejecución.</p>
+            <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+              <table class="w-full min-w-max text-left">
+                <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-800/60">
+                  <tr>
+                    <th scope="col" class="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Timestamp</th>
+                    <th scope="col" class="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Agente</th>
+                    <th scope="col" class="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Tipo</th>
+                    <th scope="col" class="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Gravedad</th>
+                    <th scope="col" class="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Estado</th>
+                    <th scope="col" class="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Descripción</th>
+                    <th scope="col" class="px-4 py-3"><span class="sr-only">Acciones</span></th>
+                  </tr>
+                </thead>
+                <tbody id="errors-table-body" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+              </table>
+            </div>
           </section>
         </main>
       </div>
